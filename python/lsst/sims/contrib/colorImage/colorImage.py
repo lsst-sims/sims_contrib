@@ -41,13 +41,15 @@ def scaleAsinh(imageList, zmin = None, zmax = None, alpha = 0.01, Q = 3, scales 
         zmax = total.max()
 
     R, G, B = imageList * scaleFunc(total, zmin, alpha, Q) / total
-#    G = imageList[1] * scaleFunc(total, zmin, alpha, Q) / total
-#    B = imageList[2] * scaleFunc(total, zmin, alpha, Q) / total
     
     maxRGB = np.maximum(np.maximum(R, G), B)
     R = np.where(maxRGB > 1, R / maxRGB, R)
     G = np.where(maxRGB > 1, G / maxRGB, G)
     B = np.where(maxRGB > 1, B / maxRGB, B)
+
+#   R = np.where(maxRGB > 1, 1, R)
+#   G = np.where(maxRGB > 1, 1, G)
+#   B = np.where(maxRGB > 1, 1, B)
     
     R = np.where(maxRGB < 0, 0, R)
     G = np.where(maxRGB < 0, 0, G)
@@ -100,7 +102,7 @@ def main():
         addNoise(images,args.noise)
 
     # scale image
-    scaledImages = scaleAsinh(images)
+    scaledImages = scaleAsinh(images, scales =[1.,1.,1.])
 
     # create RGB
     mode='RGB'
